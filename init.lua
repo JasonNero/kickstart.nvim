@@ -687,6 +687,7 @@ require('lazy').setup({
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
         --
+        tinymist = {},
 
         lua_ls = {
           -- cmd = { ... },
@@ -724,6 +725,7 @@ require('lazy').setup({
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('mason-lspconfig').setup {
+        automatic_enable = true,
         ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
         automatic_installation = false,
         handlers = {
@@ -973,7 +975,7 @@ require('lazy').setup({
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
-    main = 'nvim-treesitter.config', -- Sets main module to use for opts
+    main = 'nvim-treesitter', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
       ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
@@ -1010,9 +1012,20 @@ require('lazy').setup({
       options = {}, -- if you add plugin options, they go here.
     },
   },
+  {
+    'zbirenbaum/copilot.lua',
+    requires = { 'copilotlsp-nvim/copilot-lsp' },
+    cmd = 'Copilot',
+    event = 'InsertEnter',
+    config = function()
+      require('copilot').setup {}
+    end,
+  },
 
   {
-    'github/copilot.vim',
+    'chomosuke/typst-preview.nvim',
+    ft = 'typst',
+    version = '1.*',
     opts = {},
   },
 
