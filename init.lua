@@ -247,7 +247,12 @@ rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
+  {
+    'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
+    opts = {
+      auto_cmd = true,
+    },
+  },
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -587,7 +592,7 @@ require('lazy').setup({
 
           -- The following two autocommands are used to highlight references of the
           -- word under your cursor when your cursor rests there for a little while.
-          --    See `:help CursorHold` for information about when this is executed
+          --    See `:help CursorHold` for information about when this is executedn
           --
           -- When you move your cursor, the highlights will be cleared (the second autocommand).
           local client = vim.lsp.get_client_by_id(event.data.client_id)
@@ -740,7 +745,7 @@ require('lazy').setup({
         },
       }
       vim.lsp.config.clangd = {
-        cmd = { '/opt/local/libexec/llvm-21/bin/clangd' },
+        -- cmd = { '/opt/local/libexec/llvm-21/bin/clangd' },
         filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' },
         root_markers = { '.clangd', 'compile_commands.json', 'compile_flags.txt', '.git' },
       }
@@ -786,6 +791,7 @@ require('lazy').setup({
         c = { 'clang_format' },
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        markdown = { 'markdownlint' },
       },
       formatters = {
         clang_format = {
@@ -978,7 +984,7 @@ require('lazy').setup({
     main = 'nvim-treesitter', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'c', 'cpp', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -1018,15 +1024,54 @@ require('lazy').setup({
     cmd = 'Copilot',
     event = 'InsertEnter',
     config = function()
-      require('copilot').setup {}
+      require('copilot').setup {
+        filetypes = {
+          markdown = true,
+        },
+      }
     end,
   },
 
   {
     'chomosuke/typst-preview.nvim',
-    ft = 'typst',
+    -- ft = 'typst',
+    lazy = false,
     version = '1.*',
+    opts = {
+      get_root = function(path_of_main_file)
+        -- Default behaviour: parent folder of file
+        -- return vim.fn.fnamemodify(path_of_main_file, ':p:h')
+        -- Instead we use the cwd as typst project root
+        return vim.fn.getcwd()
+      end,
+    },
+  },
+
+  {
+    'MeanderingProgrammer/render-markdown.nvim',
+    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-mini/mini.nvim' },            -- if you use the mini.nvim suite
+    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-mini/mini.icons' },        -- if you use standalone mini plugins
+    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+    ---@module 'render-markdown'
+    ---@type render.md.UserConfig
     opts = {},
+  },
+
+  { -- Notification Manager
+    'rcarriga/nvim-notify',
+    config = function()
+      require('notify').setup {}
+      vim.notify = require 'notify'
+    end,
+  },
+
+  {
+    'm4xshen/hardtime.nvim',
+    lazy = false,
+    dependencies = { 'MunifTanjim/nui.nvim' },
+    opts = {
+      -- restriction_mode = "hint", -- Default is "block"
+    },
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
