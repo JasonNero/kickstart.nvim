@@ -166,6 +166,9 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+-- Default session options recommended by auto-session
+vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -910,7 +913,7 @@ require('lazy').setup({
       require('everforest').setup {
         -- Your config here
         background = 'hard',
-        transparent_background_level = 0,
+        transparent_background_level = 0.9,
       }
       vim.cmd.colorscheme 'everforest'
     end,
@@ -1073,6 +1076,45 @@ require('lazy').setup({
       -- restriction_mode = "hint", -- Default is "block"
     },
   },
+
+  -- {
+  --   '3rd/image.nvim',
+  --   build = false, -- so that it doesn't build the rock https://github.com/3rd/image.nvim/issues/91#issuecomment-2453430239
+  --   opts = {
+  --     processor = 'magick_cli',
+  --   },
+  -- },
+  -- {
+  --   '3rd/diagram.nvim',
+  --   dependencies = {
+  --     { '3rd/image.nvim' },
+  --   },
+  --   opts = {
+  --     renderer_options = {
+  --       mermaid = {
+  --         background = 'transparent',
+  --         theme = 'forest',
+  --         scale = 2,
+  --       },
+  --     },
+  --   },
+  -- },
+
+  {
+    'rmagatti/auto-session',
+    lazy = false,
+
+    opts = {
+      suppressed_dirs = { '~/', '~/Projects', '~/Downloads', '/' },
+    },
+    keys = {
+      -- Will use Telescope if installed or a vim.ui.select picker otherwise
+      { '<leader>wr', '<cmd>AutoSession search<CR>', desc = 'Session search' },
+      { '<leader>ws', '<cmd>AutoSession save<CR>', desc = 'Save session' },
+      { '<leader>wa', '<cmd>AutoSession toggle<CR>', desc = 'Toggle autosave' },
+    },
+  },
+
   {
     'anurag3301/nvim-platformio.lua',
     -- cmd = { 'Pioinit', 'Piorun', 'Piocmdh', 'Piocmdf', 'Piolib', 'Piomon', 'Piodebug', 'Piodb' },
