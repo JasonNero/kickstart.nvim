@@ -1074,6 +1074,7 @@ require('lazy').setup({
     dependencies = { 'MunifTanjim/nui.nvim' },
     opts = {
       -- restriction_mode = "hint", -- Default is "block"
+      disable_mouse = false,
     },
   },
 
